@@ -5,6 +5,8 @@ import cloudy from '../cloudy.png';
 import sun from '../sun.png';
 import rain from '../rain.png';
 import thunder from '../thunder.png';
+import fog from '../fog.png';
+import snow from '../snow.png';
 
 const Description = ({weather}) => {
   return (
@@ -18,14 +20,16 @@ const Description = ({weather}) => {
           <Image source={rain} style={{width: 200, height: 150}}></Image>
         ) : weather.weather[0].main === 'Thunder' ? (
           <Image source={thunder} style={{width: 200, height: 150}}></Image>
+        ) : weather.weather[0].main === 'Haze' ? (
+          <Image source={fog} style={{width: 200, height: 150}}></Image>
         ) : (
-          <Icon name="weather-snowy" size={80}></Icon>
+          <Image source={snow} style={{width: 200, height: 150}}></Image>
         )}
       </View>
       <View style={styles.container}>
         <Text style={styles.temp}>
           {Math.floor(weather.main.temp - 273)}
-          <Text style={{color: '#F9D65D',fontFamily:'coolvetica rg'}}>°</Text>
+          <Text style={{color: '#F9D65D', fontFamily: 'coolvetica rg'}}>°</Text>
         </Text>
         <Text style={styles.weather}>{weather.weather[0].main}</Text>
       </View>
@@ -33,15 +37,32 @@ const Description = ({weather}) => {
         <View style={styles.cont1}>
           <Text style={styles.description}>
             <View style={styles.desc}>
-              <Text style={{fontSize: 15, color: '#818185', fontFamily:'coolvetica rg'}}>Wind </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#818185',
+                  fontFamily: 'coolvetica rg',
+                }}>
+                Wind{' '}
+              </Text>
               <Text style={styles.text}>
-                {weather.wind.speed} <Text style={{fontSize: 20,fontFamily:'coolvetica rg'}}>km/h</Text>
+                {weather.wind.speed}{' '}
+                <Text style={{fontSize: 20, fontFamily: 'coolvetica rg'}}>
+                  km/h
+                </Text>
               </Text>
             </View>
           </Text>
           <Text style={styles.description}>
             <View style={styles.desc}>
-              <Text style={{fontSize: 15, color: '#818185',fontFamily:'coolvetica rg'}}>Humidity </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#818185',
+                  fontFamily: 'coolvetica rg',
+                }}>
+                Humidity{' '}
+              </Text>
               <Text style={styles.text}>
                 {weather.main.humidity}
                 <Text style={{fontSize: 20}}>%</Text>
@@ -54,7 +75,14 @@ const Description = ({weather}) => {
         <View style={styles.cont2}>
           <Text style={styles.description}>
             <View style={styles.desc}>
-              <Text style={{fontSize: 15, color: '#818185',fontFamily:'coolvetica rg'}}>Temp. Max </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#818185',
+                  fontFamily: 'coolvetica rg',
+                }}>
+                Temp. Max{' '}
+              </Text>
               <Text style={styles.text}>
                 {Math.floor(weather.main.temp_max - 273)}°
               </Text>
@@ -62,7 +90,14 @@ const Description = ({weather}) => {
           </Text>
           <Text style={styles.description}>
             <View style={styles.desc}>
-              <Text style={{fontSize: 15, color: '#818185',fontFamily:'coolvetica rg'}}>Temp. Min </Text>
+              <Text
+                style={{
+                  fontSize: 15,
+                  color: '#818185',
+                  fontFamily: 'coolvetica rg',
+                }}>
+                Temp. Min{' '}
+              </Text>
               <Text style={styles.text}>
                 {Math.floor(weather.main.temp_min - 273)}°
               </Text>
@@ -88,7 +123,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     marginTop: -10,
-    
   },
   temp: {
     color: '#fff',
@@ -139,6 +173,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 25,
     marginTop: 10,
-    fontFamily:'coolvetica rg'
+    fontFamily: 'coolvetica rg',
   },
 });

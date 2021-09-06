@@ -17,7 +17,6 @@ const HomeScreen = ({route}) => {
   const [city, setCity] = useState({});
   const [text, setText] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [day, setDay] = useState({});
   const [fiveDay, setFiveDay] = useState({});
 
   const {data, index} = route.params;
@@ -41,13 +40,6 @@ const HomeScreen = ({route}) => {
     console.log('city', city);
     setText('');
 
-    cityDay(text)
-      .then(res => setDay(res.data))
-      .catch(error => {
-        console.log(error);
-      });
-    console.log('day', day);
-
     getfiveDay(text)
       .then(res => setFiveDay(res.data))
       .catch(error => {
@@ -60,9 +52,7 @@ const HomeScreen = ({route}) => {
     setText('');
     if (index != undefined) {
       sendCity(data[index]);
-      console.log('sono dentro');
     }
-    console.log('sono fuori', index);
   }, [data, index]);
 
   return (
@@ -107,7 +97,7 @@ const HomeScreen = ({route}) => {
                     sendCity(text);
                   }}></Button>
               </View>
-              <Content data={city} day={day} fiveDay={fiveDay}></Content>
+              <Content data={city} fiveDay={fiveDay}></Content>
             </View>
           </ImageBackground>
         </ScrollView>

@@ -6,8 +6,29 @@ import Title from '../components/Title';
 import CitySaved from '../components/CItySaved';
 import bgImage from '../bgWorld1.jpg';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// USARE ASYNC STORAGE per salvare le città nello storage ==> sta salvato nella bar di google in WebDevTools
+const storeData = async value => {
+  try {
+    console.log('value', value);
+    const jsonValue = JSON.stringify(value);
+    console.log('json', jsonValue);
+    await AsyncStorage.setItem('FavCity', jsonValue);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
+const getData = async () => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('FavCity');
+    let parseValue = jsonValue != null ? JSON.parse(jsonValue) : null;
+    return parseValue;
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 const SavedCityScreen = () => {
   const [city, setCity] = useState([]);
   const [text, setText] = useState('');
@@ -16,24 +37,39 @@ const SavedCityScreen = () => {
   const onChangeText = textValue => setText(textValue);
 
   useEffect(() => {
-    axios
-      .all(
-        citySave.map(el => {
-          return cityName(el)
-            .then(res => ({
-              name: res.data.name,
-              weather: res.data.weather[0].main,
-              temp: res.data.main.temp,
-              country: res.data.sys.country,
-            }))
-            .catch(error => {
-              console.log(error);
-            });
-        }),
-      )
-      .then(res => setCity(res));
+    if (citySave.length > 0) {
+      axios
+        .all(
+          citySave.map(el => {
+            return cityName(el)
+              .then(res => ({
+                name: res.data.name,
+                weather: res.data.weather[0].main,
+                temp: res.data.main.temp,
+                country: res.data.sys.country,
+              }))
+              .catch(error => {
+                console.log(error);
+              });
+          }),
+        )
+        .then(res => {
+          setCity(res);
+        });
+      storeData(citySave);
+    }
+
     setText('');
   }, [citySave]);
+
+  useEffect(() => {
+    const get = async () => {
+      let res = await getData();
+      console.log('get storage', res);
+      if(res != null) setCitySave(res);
+    };
+    get();
+  }, []);
 
   const sendCitySave = () => {
     if (citySave.indexOf(text) === -1) {

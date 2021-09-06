@@ -5,17 +5,15 @@ import Description from './Description';
 import Week from './Week';
 import FiveDays from './FiveDays';
 
-const Content = ({data, day, fiveDay}) => {
+const Content = ({data, fiveDay}) => {
   return (
     <>
-      {Object.entries(data).length > 0 &&
-      Object.entries(day).length > 0 &&
-      Object.entries(fiveDay).length > 0 ? (
+      {Object.entries(data).length > 0 && Object.entries(fiveDay).length > 0 ? (
         <>
           <View style={styles.content_container}>
             <City weather={data}></City>
             <Description weather={data}></Description>
-            <Week day={day}></Week>
+            <Week fiveDay={fiveDay}></Week>
             <FiveDays fiveDay={fiveDay}></FiveDays>
           </View>
         </>
