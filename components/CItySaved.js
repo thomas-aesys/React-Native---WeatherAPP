@@ -5,7 +5,6 @@ import cloudy from '../cloudy.png';
 import sun from '../sun.png';
 import rain from '../rain.png';
 import thunder from '../thunder.png';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
   View,
@@ -24,17 +23,6 @@ const CitySaved = ({name, data, setState}) => {
     setState(newList);
   };
 
-  
-// const getData = async () => {
-//   try {
-//     const jsonValue = await AsyncStorage.getItem('FavCity')
-//     let parseValue = jsonValue != null ? JSON.parse(jsonValue) : null;
-//     return parseValue
-//   } catch(e) {
-//     console.log(e)
-//   }
-// }
-// getData().then(res => console.log(res))
   return (
     <>
       <ScrollView style={styles.content_container}>
