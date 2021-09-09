@@ -1,5 +1,4 @@
 import React from 'react';
-import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 import {View, StyleSheet, Text, Image} from 'react-native';
 import cloudy from '../cloudy.png';
 import sun from '../sun.png';
@@ -9,6 +8,7 @@ import fog from '../fog.png';
 import snow from '../snow.png';
 
 const Description = ({weather}) => {
+ 
   return (
     <>
       <View style={styles.image_container}>
@@ -20,7 +20,7 @@ const Description = ({weather}) => {
           <Image source={rain} style={{width: 200, height: 150}}></Image>
         ) : weather.weather[0].main === 'Thunder' ? (
           <Image source={thunder} style={{width: 200, height: 150}}></Image>
-        ) : weather.weather[0].main === 'Haze' ? (
+        ) : weather.weather[0].main === 'Haze' || weather.weather[0].main === 'Mist' ? (
           <Image source={fog} style={{width: 200, height: 150}}></Image>
         ) : (
           <Image source={snow} style={{width: 200, height: 150}}></Image>

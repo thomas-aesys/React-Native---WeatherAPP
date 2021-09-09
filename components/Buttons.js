@@ -18,9 +18,6 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  text: {
-      color: '#fff'
   }
 });
 

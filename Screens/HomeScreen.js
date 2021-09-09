@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Button} from '../components/Buttons';
-import {cityName, cityDay, getfiveDay} from '../API/api';
+import {cityName, getHours, getCityByGeoCoords} from '../API/api';
 import Title from '../components/Title';
 import {
   View,
@@ -10,22 +10,48 @@ import {
   ScrollView,
 } from 'react-native';
 import Content from '../components/Content';
-import LoadingScreen from './LoadingScreen';
 import bgImage from '../bgWorld1.jpg';
+import Geolocation from '@react-native-community/geolocation';
 
 const HomeScreen = ({route}) => {
   const [city, setCity] = useState({});
   const [text, setText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [fiveDay, setFiveDay] = useState({});
+  const [isGeo, setIsGeo] = useState(false);
+  const [coords, setCoords] = useState();
+  const [geoLocation, setGeoLocation] = useState(null);
+  const [hours, setHours] = useState();
 
-  const {data, index} = route.params;
+  const {data} = route.params;
+
+  useEffect(()=> {
+    setCoords('')
+  },[city,text,hours])
 
   useEffect(() => {
-    setTimeout(function () {
-      setIsLoading(false);
-    }, 3000);
+    Geolocation.getCurrentPosition(info => {
+      const {longitude, latitude} = info.coords;
+      setCoords({longitude, latitude});
+    });
   }, []);
+
+  useEffect(() => {
+    if (!isGeo && coords) setIsGeo(true);
+  }, [isGeo, coords]);
+
+  useEffect(() => {
+    if (coords && coords.latitude && coords.longitude && !geoLocation && !data) {
+      getCityByGeoCoords(coords.latitude, coords.longitude).then(res =>
+        setGeoLocation(res.data),
+      );
+    }
+    if (geoLocation && !hours && !data) {
+      getHours(geoLocation.name)
+        .then(res => setHours(res.data.list))
+        .catch(error => {
+          console.log(error);
+        });
+    }
+  }, [coords, geoLocation, data]);
 
   const onChangeText = textValue => {
     setText(textValue);
@@ -37,71 +63,53 @@ const HomeScreen = ({route}) => {
       .catch(error => {
         console.log(error);
       });
-    console.log('city', city);
     setText('');
 
-    getfiveDay(text)
-      .then(res => setFiveDay(res.data))
+    getHours(text)
+      .then(res => setHours(res.data.list))
       .catch(error => {
         console.log(error);
       });
-    console.log('fiveForecast', fiveDay);
+
+    setIsGeo(false);
   };
 
   useEffect(() => {
     setText('');
-    if (index != undefined) {
-      sendCity(data[index]);
+    if (data) {
+      sendCity(data);
     }
-  }, [data, index]);
+    console.log('data', data);
+  }, [data]);
 
   return (
     <>
-      {isLoading ? (
-        <LoadingScreen></LoadingScreen>
-      ) : Object.entries(city).length === 0 ? (
-        <View style={styles.container}>
-          <ImageBackground source={bgImage} style={styles.image}>
-            <View style={{padding: 15, marginTop: 50}}>
-              <Title title={'Search for city'} />
-              <View style={styles.container_input}>
-                <TextInput
-                  value={text}
-                  onChangeText={onChangeText}
-                  style={styles.input}
-                />
-                <Button
-                  onPress={() => {
-                    sendCity(text);
-                  }}></Button>
-              </View>
+      <ScrollView style={styles.container}>
+        <ImageBackground
+          source={bgImage}
+          style={styles.image}
+          resizeMode="cover">
+          <View style={{padding: 15, marginTop: 50}}>
+            <Title title={'Search for city'} />
+            <View style={styles.container_input}>
+              <TextInput
+                value={text}
+                onChangeText={onChangeText}
+                style={styles.input}
+              />
+              <Button
+                onPress={() => {
+                  sendCity(text);
+                }}></Button>
             </View>
-          </ImageBackground>
-        </View>
-      ) : (
-        <ScrollView style={styles.container}>
-          <ImageBackground
-            source={bgImage}
-            style={styles.image}
-            resizeMode="cover">
-            <View style={{padding: 15, marginTop: 50}}>
-              <Title title={'Search for city'} />
-              <View style={styles.container_input}>
-                <TextInput
-                  value={text}
-                  onChangeText={onChangeText}
-                  style={styles.input}
-                />
-                <Button
-                  onPress={() => {
-                    sendCity(text);
-                  }}></Button>
-              </View>
-              <Content data={city} fiveDay={fiveDay}></Content>
-            </View>
-          </ImageBackground>
-        </ScrollView>
-      )}
+            <Content
+              data={city}
+              hours={hours}
+              isGeo={isGeo}
+              geoLocation={geoLocation}></Content>
+          </View>
+        </ImageBackground>
+      </ScrollView>
     </>
   );
 };

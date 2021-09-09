@@ -5,6 +5,8 @@ import cloudy from '../cloudy.png';
 import sun from '../sun.png';
 import rain from '../rain.png';
 import thunder from '../thunder.png';
+import fog from '../fog.png';
+import snow from '../snow.png';
 
 import {
   View,
@@ -42,10 +44,8 @@ const CitySaved = ({name, data, setState}) => {
                   <TouchableOpacity
                     key={index}
                     onPress={() => {
-                      let newData = [...name];
                       navigation.navigate('Home', {
-                        data: newData,
-                        index: index,
+                        data: name[index],
                       });
                     }}>
                     <View style={{alignItems: 'center', marginTop: -5}}>
@@ -75,8 +75,14 @@ const CitySaved = ({name, data, setState}) => {
                         <Image
                           source={thunder}
                           style={{width: 110, height: 100}}></Image>
+                      ) : el.weather === 'Haze' || el.weather === 'Mist' ? (
+                        <Image
+                          source={fog}
+                          style={{width: 110, height: 100}}></Image>
                       ) : (
-                        <Icon name="weather-snowy" size={80}></Icon>
+                        <Image
+                          source={snow}
+                          style={{width: 200, height: 150}}></Image>
                       )}
                     </View>
                     <View style={styles.temp_container}>
@@ -118,7 +124,7 @@ const styles = StyleSheet.create({
   card: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   container_desc: {
     display: 'flex',

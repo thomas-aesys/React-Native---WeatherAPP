@@ -2,15 +2,14 @@ import React from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/MaterialCommunityIcons';
 
-const City = ({weather}) => {
-  console.log('weather', weather);
+const City = ({name, country}) => {
   return (
     <View style={styles.container}>
       <Icon style={styles.iconpin} name="map-marker" size={25} />
       <Text style={styles.cityName}>
-        {weather.name},{' '}
+        {name},{' '}
         <Text style={{color: '#818185'}}>
-          {weather.sys ? `(${weather.sys.country})` : ''}{' '}
+          {country ? `(${country})` : ''}{' '}
         </Text>
       </Text>
     </View>

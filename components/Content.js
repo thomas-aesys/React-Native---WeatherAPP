@@ -3,18 +3,26 @@ import {View, StyleSheet, Text} from 'react-native';
 import City from './City';
 import Description from './Description';
 import Week from './Week';
-import FiveDays from './FiveDays';
+import MoreDays from './MoreDays';
 
-const Content = ({data, fiveDay}) => {
+const Content = ({data, hours, isGeo, geoLocation}) => {
   return (
     <>
-      {Object.entries(data).length > 0 && Object.entries(fiveDay).length > 0 ? (
+      {isGeo === true && geoLocation ? (
+        <View style={styles.content_container}>
+          <City
+            name={geoLocation.name}
+            country={geoLocation.sys.country}></City>
+          <Description weather={geoLocation}></Description>
+          <Week hours={hours}></Week>
+        </View>
+      ) : Object.entries(data).length > 0 && hours && hours.length > 0 ? (
         <>
           <View style={styles.content_container}>
-            <City weather={data}></City>
+            <City name={data.name} country={data.sys.country}></City>
             <Description weather={data}></Description>
-            <Week fiveDay={fiveDay}></Week>
-            <FiveDays fiveDay={fiveDay}></FiveDays>
+            <Week hours={hours}></Week>
+            {/* <MoreDays hours={hours}></MoreDays> */}
           </View>
         </>
       ) : (

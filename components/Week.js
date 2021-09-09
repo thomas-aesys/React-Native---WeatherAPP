@@ -7,8 +7,9 @@ import thunder from '../thunder.png';
 import fog from '../fog.png';
 import snow from '../snow.png';
 
-const Week = ({fiveDay}) => {
-  let filter = fiveDay.list.filter(
+const Week = ({hours}) => {
+
+  let filter = hours && hours.filter(
     el =>
       new Date(el.dt_txt.replace('T ', '')).toLocaleDateString([], {
         day: '2-digit',
@@ -22,11 +23,9 @@ const Week = ({fiveDay}) => {
       }),
   );
 
-  console.log(filter);
-
   return (
     <View style={styles.container}>
-      {fiveDay.list.length > 0 ? (
+      {hours && hours.length > 0 ? (
         filter.map(el => {
           return (
             <>
@@ -84,6 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
   },
   container_temp: {
+    alignItems: 'center'
   },
 });
 
